@@ -1,0 +1,335 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7A54E49414FC7606000A041E /* CloudMine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A54E49314FC7606000A041E /* CloudMine.framework */; };
+		7A74C25314F44029002F6BE0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C25214F44029002F6BE0 /* UIKit.framework */; };
+		7A74C25514F44029002F6BE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C25414F44029002F6BE0 /* Foundation.framework */; };
+		7A74C25714F44029002F6BE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C25614F44029002F6BE0 /* CoreGraphics.framework */; };
+		7A74C25D14F44029002F6BE0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A74C25B14F44029002F6BE0 /* InfoPlist.strings */; };
+		7A74C25F14F44029002F6BE0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A74C25E14F44029002F6BE0 /* main.m */; };
+		7A74C26314F44029002F6BE0 /* DTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A74C26214F44029002F6BE0 /* DTAppDelegate.m */; };
+		7A74C26614F44029002F6BE0 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A74C26414F44029002F6BE0 /* MainStoryboard.storyboard */; };
+		7A74C26914F44029002F6BE0 /* DTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A74C26814F44029002F6BE0 /* DTViewController.m */; };
+		7A74C27014F4404A002F6BE0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C26F14F4404A002F6BE0 /* SystemConfiguration.framework */; };
+		7A74C27214F4404E002F6BE0 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C27114F4404E002F6BE0 /* libz.dylib */; };
+		7A74C27414F44055002F6BE0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C27314F44055002F6BE0 /* CFNetwork.framework */; };
+		7A74C27614F44067002F6BE0 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C27514F44067002F6BE0 /* MobileCoreServices.framework */; };
+		7A74C27A14F443CC002F6BE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C27914F443CC002F6BE0 /* MapKit.framework */; };
+		7A74C27F14F492F9002F6BE0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C27E14F492F9002F6BE0 /* CoreLocation.framework */; };
+		7A74C28214F580B6002F6BE0 /* DTDeviceToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A74C28114F580B6002F6BE0 /* DTDeviceToken.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7A54E49314FC7606000A041E /* CloudMine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudMine.framework; path = "../cloudmine-ios/ios/build/Release-iphoneuniversal/CloudMine.framework"; sourceTree = "<group>"; };
+		7A74C24E14F44029002F6BE0 /* DeviceTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeviceTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A74C25214F44029002F6BE0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		7A74C25414F44029002F6BE0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		7A74C25614F44029002F6BE0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		7A74C25A14F44029002F6BE0 /* DeviceTracker-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DeviceTracker-Info.plist"; sourceTree = "<group>"; };
+		7A74C25C14F44029002F6BE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A74C25E14F44029002F6BE0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7A74C26014F44029002F6BE0 /* DeviceTracker-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DeviceTracker-Prefix.pch"; sourceTree = "<group>"; };
+		7A74C26114F44029002F6BE0 /* DTAppDelegate.h */ = {isa = PBXFileReference; path = DTAppDelegate.h; sourceTree = "<group>"; };
+		7A74C26214F44029002F6BE0 /* DTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTAppDelegate.m; sourceTree = "<group>"; };
+		7A74C26514F44029002F6BE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		7A74C26714F44029002F6BE0 /* DTViewController.h */ = {isa = PBXFileReference; path = DTViewController.h; sourceTree = "<group>"; };
+		7A74C26814F44029002F6BE0 /* DTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTViewController.m; sourceTree = "<group>"; };
+		7A74C26F14F4404A002F6BE0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7A74C27114F4404E002F6BE0 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		7A74C27314F44055002F6BE0 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		7A74C27514F44067002F6BE0 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		7A74C27914F443CC002F6BE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		7A74C27E14F492F9002F6BE0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		7A74C28014F580B5002F6BE0 /* DTDeviceToken.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DTDeviceToken.h; sourceTree = "<group>"; };
+		7A74C28114F580B6002F6BE0 /* DTDeviceToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTDeviceToken.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7A74C24B14F44029002F6BE0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A74C27F14F492F9002F6BE0 /* CoreLocation.framework in Frameworks */,
+				7A74C27A14F443CC002F6BE0 /* MapKit.framework in Frameworks */,
+				7A74C27614F44067002F6BE0 /* MobileCoreServices.framework in Frameworks */,
+				7A74C27414F44055002F6BE0 /* CFNetwork.framework in Frameworks */,
+				7A74C27214F4404E002F6BE0 /* libz.dylib in Frameworks */,
+				7A74C27014F4404A002F6BE0 /* SystemConfiguration.framework in Frameworks */,
+				7A74C25314F44029002F6BE0 /* UIKit.framework in Frameworks */,
+				7A74C25514F44029002F6BE0 /* Foundation.framework in Frameworks */,
+				7A74C25714F44029002F6BE0 /* CoreGraphics.framework in Frameworks */,
+				7A54E49414FC7606000A041E /* CloudMine.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7A74C24314F44029002F6BE0 = {
+			isa = PBXGroup;
+			children = (
+				7A74C25814F44029002F6BE0 /* DeviceTracker */,
+				7A74C25114F44029002F6BE0 /* Frameworks */,
+				7A74C24F14F44029002F6BE0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7A74C24F14F44029002F6BE0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7A74C24E14F44029002F6BE0 /* DeviceTracker.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7A74C25114F44029002F6BE0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7A54E49314FC7606000A041E /* CloudMine.framework */,
+				7A74C27E14F492F9002F6BE0 /* CoreLocation.framework */,
+				7A74C27914F443CC002F6BE0 /* MapKit.framework */,
+				7A74C27514F44067002F6BE0 /* MobileCoreServices.framework */,
+				7A74C27314F44055002F6BE0 /* CFNetwork.framework */,
+				7A74C27114F4404E002F6BE0 /* libz.dylib */,
+				7A74C26F14F4404A002F6BE0 /* SystemConfiguration.framework */,
+				7A74C25214F44029002F6BE0 /* UIKit.framework */,
+				7A74C25414F44029002F6BE0 /* Foundation.framework */,
+				7A74C25614F44029002F6BE0 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7A74C25814F44029002F6BE0 /* DeviceTracker */ = {
+			isa = PBXGroup;
+			children = (
+				7A74C26114F44029002F6BE0 /* DTAppDelegate.h */,
+				7A74C26214F44029002F6BE0 /* DTAppDelegate.m */,
+				7A74C26414F44029002F6BE0 /* MainStoryboard.storyboard */,
+				7A74C26714F44029002F6BE0 /* DTViewController.h */,
+				7A74C26814F44029002F6BE0 /* DTViewController.m */,
+				7A74C28014F580B5002F6BE0 /* DTDeviceToken.h */,
+				7A74C28114F580B6002F6BE0 /* DTDeviceToken.m */,
+				7A74C25914F44029002F6BE0 /* Supporting Files */,
+			);
+			path = DeviceTracker;
+			sourceTree = "<group>";
+		};
+		7A74C25914F44029002F6BE0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7A74C25A14F44029002F6BE0 /* DeviceTracker-Info.plist */,
+				7A74C25B14F44029002F6BE0 /* InfoPlist.strings */,
+				7A74C25E14F44029002F6BE0 /* main.m */,
+				7A74C26014F44029002F6BE0 /* DeviceTracker-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7A74C24D14F44029002F6BE0 /* DeviceTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A74C26C14F44029002F6BE0 /* Build configuration list for PBXNativeTarget "DeviceTracker" */;
+			buildPhases = (
+				7A74C24A14F44029002F6BE0 /* Sources */,
+				7A74C24B14F44029002F6BE0 /* Frameworks */,
+				7A74C24C14F44029002F6BE0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeviceTracker;
+			productName = DeviceTracker;
+			productReference = 7A74C24E14F44029002F6BE0 /* DeviceTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7A74C24514F44029002F6BE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 7A74C24814F44029002F6BE0 /* Build configuration list for PBXProject "DeviceTracker" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7A74C24314F44029002F6BE0;
+			productRefGroup = 7A74C24F14F44029002F6BE0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7A74C24D14F44029002F6BE0 /* DeviceTracker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7A74C24C14F44029002F6BE0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A74C25D14F44029002F6BE0 /* InfoPlist.strings in Resources */,
+				7A74C26614F44029002F6BE0 /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7A74C24A14F44029002F6BE0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A74C25F14F44029002F6BE0 /* main.m in Sources */,
+				7A74C26314F44029002F6BE0 /* DTAppDelegate.m in Sources */,
+				7A74C26914F44029002F6BE0 /* DTViewController.m in Sources */,
+				7A74C28214F580B6002F6BE0 /* DTDeviceToken.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		7A74C25B14F44029002F6BE0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A74C25C14F44029002F6BE0 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7A74C26414F44029002F6BE0 /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A74C26514F44029002F6BE0 /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7A74C26A14F44029002F6BE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marc Weil (7DQ7X2PC7K)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PROVISIONING_PROFILE = "D0F5FD06-7BFD-405D-BF3B-B62573263D76";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		7A74C26B14F44029002F6BE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7A74C26D14F44029002F6BE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../cloudmine-ios/ios/build/Release-iphoneuniversal\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DeviceTracker/DeviceTracker-Prefix.pch";
+				INFOPLIST_FILE = "DeviceTracker/DeviceTracker-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		7A74C26E14F44029002F6BE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../cloudmine-ios/ios/build/Release-iphoneuniversal\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DeviceTracker/DeviceTracker-Prefix.pch";
+				INFOPLIST_FILE = "DeviceTracker/DeviceTracker-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7A74C24814F44029002F6BE0 /* Build configuration list for PBXProject "DeviceTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A74C26A14F44029002F6BE0 /* Debug */,
+				7A74C26B14F44029002F6BE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A74C26C14F44029002F6BE0 /* Build configuration list for PBXNativeTarget "DeviceTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A74C26D14F44029002F6BE0 /* Debug */,
+				7A74C26E14F44029002F6BE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7A74C24514F44029002F6BE0 /* Project object */;
+}
