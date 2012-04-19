@@ -22,8 +22,8 @@
      ****************************************
      */
      
-    [[CMAPICredentials sharedInstance] setAppIdentifier:@"83e145d117db4aef9c399808c54e1672"];
-    [[CMAPICredentials sharedInstance] setAppSecret:@"6ce718b3781c47c79373aee39816e560"];
+    [[CMAPICredentials sharedInstance] setAppIdentifier:@"124abe9f83094018a40bfc2eb8b6fb05"];
+    [[CMAPICredentials sharedInstance] setAppSecret:@"f414e2c05bf9422cabe9b89810d1be66"];
     
     /*
      ******************************************************************************
@@ -65,7 +65,7 @@
      *******************************************************************************
      */    
     
-    [store allObjectsOfType:[DTDeviceToken class] additionalOptions:nil callback:^(NSArray *objects, NSDictionary *errors) {
+    [store allObjectsOfClass:[DTDeviceToken class] additionalOptions:nil callback:^(NSArray *objects, NSDictionary *errors) {
         NSUInteger tokenIdx = [objects indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             return [token.token isEqualToString:[obj token]];
         }];
