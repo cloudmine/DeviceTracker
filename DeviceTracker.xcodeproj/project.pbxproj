@@ -27,7 +27,7 @@
 
 /* Begin PBXFileReference section */
 		7A54E4A314FC7C40000A041E /* CloudMine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CloudMine.framework; sourceTree = "<group>"; };
-		7A74C24E14F44029002F6BE0 /* DeviceTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeviceTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A74C24E14F44029002F6BE0 /* KidTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KidTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A74C25214F44029002F6BE0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7A74C25414F44029002F6BE0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7A74C25614F44029002F6BE0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -83,7 +83,7 @@
 		7A74C24F14F44029002F6BE0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7A74C24E14F44029002F6BE0 /* DeviceTracker.app */,
+				7A74C24E14F44029002F6BE0 /* KidTracker.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -148,7 +148,7 @@
 			);
 			name = DeviceTracker;
 			productName = DeviceTracker;
-			productReference = 7A74C24E14F44029002F6BE0 /* DeviceTracker.app */;
+			productReference = 7A74C24E14F44029002F6BE0 /* KidTracker.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -249,6 +249,7 @@
 					"-all_load",
 				);
 				PROVISIONING_PROFILE = "D0F5FD06-7BFD-405D-BF3B-B62573263D76";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D0F5FD06-7BFD-405D-BF3B-B62573263D76";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -260,7 +261,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -289,7 +290,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DeviceTracker/DeviceTracker-Prefix.pch";
 				INFOPLIST_FILE = "DeviceTracker/DeviceTracker-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = KidTracker;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -305,7 +307,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DeviceTracker/DeviceTracker-Prefix.pch";
 				INFOPLIST_FILE = "DeviceTracker/DeviceTracker-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = KidTracker;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
