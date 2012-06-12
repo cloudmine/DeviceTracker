@@ -2,11 +2,11 @@
 //  CMServerFunction.h
 //  cloudmine-ios
 //
-//  Copyright (c) 2011 CloudMine, LLC. All rights reserved.
+//  Copyright (c) 2012 CloudMine, LLC. All rights reserved.
 //  See LICENSE file included with SDK for details.
 //
 
-#import <Foundation/Foundation.h>
+#import <YAJLiOS/YAJL.h>
 
 /**
  * Encapsulates a call to a server-side function. The call is triggered by being attached to
@@ -41,10 +41,10 @@
 
 /**
  * If <tt>YES</tt>, causes the server-side code snippet to be run asynchronously with respect to the request
- * that triggered it. This means the request will return immediately and thus the server-side snippet cannot 
+ * that triggered it. This means the request will return immediately and thus the server-side snippet cannot
  * add any information to the response.
  *
- * Default is <tt>NO</tt>. Setting this to <tt>YES</tt> causes <tt>resultOnly</tt> to be treated as 
+ * Default is <tt>NO</tt>. Setting this to <tt>YES</tt> causes <tt>resultOnly</tt> to be treated as
  * <tt>NO</tt> regardless of what you set it to.
  */
 @property (nonatomic, assign) BOOL async;

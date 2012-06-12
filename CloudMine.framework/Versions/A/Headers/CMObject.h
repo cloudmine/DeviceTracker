@@ -2,7 +2,7 @@
 //  CMObject.h
 //  cloudmine-ios
 //
-//  Copyright (c) 2011 CloudMine, LLC. All rights reserved.
+//  Copyright (c) 2012 CloudMine, LLC. All rights reserved.
 //  See LICENSE file included with SDK for details.
 //
 
@@ -46,14 +46,10 @@
 
 /**
  * Initializes this app-level object with the given object ID. Note that this MUST be unique throughout your app.
+ *
+ * @param theObjectId The unique id of the object. This must be unique throughout the entire app.
  */
 - (id)initWithObjectId:(NSString *)theObjectId;
-
-/**
- * Initializes this user-level object with the given object ID and <tt>CMUser</tt>. 
- * Note that the object ID MUST be unique throughout your app.
- */
-- (id)initWithObjectId:(NSString *)theObjectId user:(CMUser *)theUser;
 
 /**
  * Default behavior does nothing other than call <tt>[self init]</tt>. Override this in your subclasses
@@ -64,7 +60,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder;
 
 /**
- * Default behavior does nothing. Override this in your subclasses to define logic 
+ * Default behavior does nothing. Override this in your subclasses to define logic
  * for serializing instances of each subclass for remote storage.
  *
  * @see CMSerializable

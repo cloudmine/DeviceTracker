@@ -13,5 +13,4 @@
     #import <Foundation/Foundation.h>
     #import <MapKit/MapKit.h>
     #import <CoreLocation/CoreLocation.h>
-    #import <CloudMine/CloudMine.h>
 #endif

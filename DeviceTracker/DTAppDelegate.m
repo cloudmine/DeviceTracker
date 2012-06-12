@@ -63,10 +63,9 @@
      ******************************************************************************
      **** Check to see if the device has already been registered.
      *******************************************************************************
-     */    
-    
-    [store allObjectsOfClass:[DTDeviceToken class] additionalOptions:nil callback:^(NSArray *objects, NSDictionary *errors) {
-        NSUInteger tokenIdx = [objects indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+     */
+    [store allObjectsOfClass:[DTDeviceToken class] additionalOptions:nil callback:^(CMObjectFetchResponse *response) {
+        NSUInteger tokenIdx = [response.objects indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             return [token.token isEqualToString:[obj token]];
         }];
         
@@ -98,7 +97,7 @@
      *****************************************************************
      */
     
-    [store saveObject:token additionalOptions:storeOptions callback:^(NSDictionary *uploadStatuses) {
+    [store saveObject:token additionalOptions:storeOptions callback:^(CMObjectUploadResponse *response) {
         if (store.lastError) {
             NSLog(@"Ruh roh! There was an error. %@", [store.lastError description]);
         } else {

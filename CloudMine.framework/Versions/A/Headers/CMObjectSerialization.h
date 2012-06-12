@@ -2,16 +2,18 @@
 //  CMObjectSerialization.h
 //  cloudmine-ios
 //
-//  Copyright (c) 2011 CloudMine, LLC. All rights reserved.
+//  Copyright (c) 2012 CloudMine, LLC. All rights reserved.
 //  See LICENSE file included with SDK for details.
 //
+
+#import "SPLowVerbosity.h"
 
 /**
  * Constants and enums used across the various encoding and decoding classes.
  */
 
 /**
- * To distinguish between dictionary representation and an actual dictionary object 
+ * To distinguish between dictionary representation and an actual dictionary object
  * on the client side, this special classname is used to represent the latter.
  */
 #define CMInternalHashClassName @"map"
@@ -36,3 +38,8 @@
  * becomes the key of the object's representation in dictionary form.
  */
 #define CMInternalObjectIdKey @"__id__"
+
+/**
+ * A set of all the object keys used internally by this framework for (de)serialization purposes.
+ */
+#define CMInternalKeys $set(CMInternalTypeStorageKey, CMInternalClassStorageKey, CMInternalObjectIdKey)

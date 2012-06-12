@@ -289,6 +289,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DeviceTracker/DeviceTracker-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../cloudmine-ios/ios/build/Release-iphoneuniversal/CloudMine.framework/Headers\"/**";
 				INFOPLIST_FILE = "DeviceTracker/DeviceTracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = KidTracker;
@@ -306,6 +307,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DeviceTracker/DeviceTracker-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../cloudmine-ios/ios/build/Release-iphoneuniversal/CloudMine.framework/Headers\"/**";
 				INFOPLIST_FILE = "DeviceTracker/DeviceTracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = KidTracker;
