@@ -21,8 +21,19 @@
 + (id)sharedInstance;
 
 /**
- * The Secret Key from your CloudMine dashboard.
+ * Convenience method to set both the App ID and the API Key simultaneously.
+ */
+- (void)setAppIdentifier:(NSString *)appId andApiKey:(NSString *)apiKey;
+
+/**
+ * The API Key from your CloudMine dashboard.
  * @see https://cloudmine.me/dashboard
+ */
+@property (strong) NSString *apiKey;
+
+/**
+ * @deprecated
+ * @see apiKey
  */
 @property (strong) NSString *appSecret;
 
