@@ -6,8 +6,6 @@
 //  See LICENSE file included with SDK for details.
 //
 
-#import "SPLowVerbosity.h"
-
 /**
  * Constants and enums used across the various encoding and decoding classes.
  */
@@ -45,6 +43,11 @@
 #define CMInternalObjectACLsKey @"__access__"
 
 /**
+ * The key used to store services from linking accounts with social networks
+ */
+#define CMInternalServiceStorageKey @"__services__"
+
+/**
  * A set of all the object keys used internally by this framework for (de)serialization purposes.
  */
-#define CMInternalKeys $set(CMInternalTypeStorageKey, CMInternalClassStorageKey, CMInternalObjectIdKey, CMInternalObjectACLsKey)
+#define CMInternalKeys [NSSet setWithObjects:CMInternalTypeStorageKey, CMInternalClassStorageKey, CMInternalObjectIdKey, CMInternalObjectACLsKey, CMInternalServiceStorageKey, nil]

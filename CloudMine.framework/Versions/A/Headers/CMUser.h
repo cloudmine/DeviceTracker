@@ -10,6 +10,55 @@
 
 #import "CMSerializable.h"
 #import "CMUserAccountResult.h"
+#import "CMSocialLoginViewController.h"
+#import "CMPaymentResponse.h"
+
+@class CMCardPayment;
+
+/** Social network identifier for Facebook */
+extern NSString * const CMSocialNetworkFacebook;
+
+/** Social network identifier for Twitter */
+extern NSString * const CMSocialNetworkTwitter;
+
+/** Social network identifier for Foursquare */
+extern NSString * const CMSocialNetworkFoursquare;
+
+/** Social network identifier for Instagream */
+extern NSString * const CMSocialNetworkInstagram;
+
+/** Social network identifier for Tumblr */
+extern NSString * const CMSocialNetworkTumblr;
+
+/** Social network identifier for Dropbox */
+extern NSString * const CMSocialNetworkDropbox;
+
+/** Social network identifier for Fitbit */
+extern NSString * const CMSocialNetworkFitbit;
+
+/** Social network identifier for GitHub */
+extern NSString * const CMSocialNetworkGithub;
+
+/** Social network identifier for LinkedIn */
+extern NSString * const CMSocialNetworkLinkedin;
+
+/** Social network identifier for Meetup.com */
+extern NSString * const CMSocialNetworkMeetup;
+
+/** Social network identifier for Runkeeper */
+extern NSString * const CMSocialNetworkRunkeeper;
+
+/** Social network identifier for Whithings */
+extern NSString * const CMSocialNetworkWhithings;
+
+/** Social network identifier for Wordpress.com */
+extern NSString * const CMSocialNetworkWordpress;
+
+/** Social network identifier for Yammer */
+extern NSString * const CMSocialNetworkYammer;
+
+/** Social network identifier for Singly */
+extern NSString * const CMSocialNetworkSingly;
 
 /**
  * The block callback for all user account and session operations that take place on an instance of <tt>CMUser</tt>.
@@ -42,13 +91,27 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
 
 /**
  * The user's identifier (i.e. email address).
+ *
+ * <strong>DEPRECATED:</strong> Now use <tt>email</tt>. This will be removed at a future date.
+ *
+ * <strong>Note:</strong> This variable now maps directly to email, and will be removed at a futre date. Please use email instead.
  */
-@property (atomic, strong) NSString *userId;
+@property (atomic, strong) NSString *userId __attribute__((deprecated));
+
+/**
+ * The user's email (the new User ID).
+ */
+@property (atomic, strong) NSString *email;
 
 /**
  * The user's plaintext password.
  */
 @property (atomic, strong) NSString *password;
+
+/**
+ * The user's plaintext password
+ */
+@property (atomic, strong) NSString *username;
 
 /**
  * The user's session token, as assigned after a successful login operation.
@@ -81,9 +144,38 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
 @property (readonly) BOOL isLoggedIn;
 
 /**
+ * The social services the user has linked their profile to.
+ */
+@property (atomic, strong) NSArray *services;
+
+/**
+ * Initialize the user with an email address and password.
+ *
+ * <strong>DEPRECATED:</strong> Now use <tt>initWithEmail:andPassword:</tt> instead.
+ */
+- (id)initWithUserId:(NSString *)userId andPassword:(NSString *)password __attribute__((deprecated));
+
+/**
  * Initialize the user with an email address and password.
  */
-- (id)initWithUserId:(NSString *)userId andPassword:(NSString *)password;
+- (id)initWithEmail:(NSString *)theEmail andPassword:(NSString *)thePassword;
+
+/**
+ * Initialize the user with a Username and password.
+ */
+- (id)initWithUsername:(NSString *)theUsername andPassword:(NSString *)thePassword;
+
+/**
+ * Initialize the user with an email, username, and password.
+ *
+ * <strong>DEPRECATED:</strong> Now use <tt>initWithEmail:andUsername:andPassword:</tt> instead.
+ */
+- (id)initWithUserId:(NSString *)theUserId andUsername:(NSString *)theUsername andPassword:(NSString *)thePassword __attribute__((deprecated));
+
+/**
+ * Initialize the user with an email, username, and password.
+ */
+- (id)initWithEmail:(NSString *)theEmail andUsername:(NSString *)theUsername andPassword:(NSString *)thePassword;
 
 /**
  * Asynchronously login the user and create a new session. On completion, the <tt>callback</tt> block will be called with
@@ -107,9 +199,37 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
  *
  * @see CMUserAccountResult
  * @see isLoggedIn
- * @see https://cloudmine.me/developer_zone#ref/account_login
+ * @see https://cloudmine.me/docs/ios/reference#users_login
  */
 - (void)loginWithCallback:(CMUserOperationCallback)callback;
+
+/**
+ * Login with social networking sites through Singly.  Calls a UIWebView for authentication, which loads the authentication page of the
+ * social network you specify.
+ *
+ * If you call this method and the user is logged in already, it will link the logged in user with the social network account. If the user
+ * is not logged in, this call will create a new user.
+ * 
+ * Upon successful login, the CMUser#token property will be set to the user's new session token The CMUser#tokenExpiration property will also be set with the expiration date and time
+ * of the session token. In addition, all your custom properties (if you are using a custom subclass of <tt>CMUser</tt>) will be populated for you using key-value coding.
+ * All these properties will be set <strong>before</strong> the callback block is invoked.
+ *
+ * Possible result codes:
+ * - <tt>CMUserAccountLoginSucceeded</tt>
+ * - <tt>CMUserAccountLoginFailedIncorrectCredentials</tt>
+ * - <tt>CMUserAccountOperationFailedUnknownAccount</tt>
+ *
+ * @param service The social service to be logged into
+ * @param viewController the current view controller in use when this method is called
+ * @param params Any extra parameters you want passed in to the authentication request. This dictionary is parsed where each key value pair becomes "&key=value". We do not encode the URL after this, so any encoding will need to be done by the creator. This is a good place to put scope, for example: @{@"scope" : @"gist,repo"}
+ * @param callback The block that will be called on completion of the operation.
+ * @see https://cloudmine.me/docs/api#users_social
+ */
+- (CMSocialLoginViewController *)loginWithSocialNetwork:(NSString *)service
+                                         viewController:(UIViewController *)viewController
+                                                 params:(NSDictionary *)params
+                                               callback:(CMUserOperationCallback)callback;
+
 
 /**
  * Asynchronously logout the user and clear their session and session token. On completion, the <tt>callback</tt> block will be called with
@@ -127,7 +247,7 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
  *
  * @see CMUserAccountResult
  * @see isLoggedIn
- * @see https://cloudmine.me/developer_zone#ref/account_logout
+ * @see https://cloudmine.me/docs/ios/reference#users_logout
  */
 - (void)logoutWithCallback:(CMUserOperationCallback)callback;
 
@@ -147,7 +267,7 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
  * @param callback The block that will be called on completion of the operation.
  *
  * @see CMUserAccountResult
- * @see https://cloudmine.me/developer_zone#ref/account_create
+ * @see https://cloudmine.me/docs/ios/reference#users_create
  */
 - (void)createAccountWithCallback:(CMUserOperationCallback)callback;
 
@@ -183,9 +303,151 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
  * @param callback The block that will be called on completion of the operation.
  *
  * @see CMUserAccountResult
- * @see https://cloudmine.me/developer_zone#ref/password_change
+ * @see https://cloudmine.me/docs/ios/reference#users_pass_change
  */
 - (void)changePasswordTo:(NSString *)newPassword from:(NSString *)oldPassword callback:(CMUserOperationCallback)callback;
+
+/**
+ *
+ * <strong>DEPRECATED:</strong> This method is now deprecated. Use <tt>changeEmailTo:password:callback:</tt> instead.
+ *
+ * Asynchronously change the User ID for this user. For security purposes, you must have the user enter his or her
+ * current password in order to perform this operation. The user does not need to be logged in to change this property. If this method
+ * is successful then the user is automatically logged in again to get their new session token. If it is not successful, the user is not logged out.
+ * On completion, the <tt>callback</tt> block will be called with the result of the operation and any messages
+ * returned by the server contained in an array. See the CloudMine documentation online for the possible contents of this array.
+ *
+ * @see userId for notes on how User ID is now used.
+ *
+ * Possible result codes:
+ * - <tt>CMUserAccountUserIdChangeSucceeded</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedInvalidCredentials</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateUserId</tt>
+ * - <tt>CMUserAccountOperationFailedUnknownAccount</tt>
+ * - <tt>CMUserAccountUnknownResult</tt>
+ *
+ * @param newUserId The new User ID for this user. It needs to be in the form of an email address. If you don't want to use an email
+    then you should <tt>username</tt>
+ * @param currentPassword The current password for the user.
+ * @param callback The block that will be called on completion of the operation.
+ *
+ * @see CMUserAccountResult
+ */
+- (void)changeUserIdTo:(NSString *)newUserId password:(NSString *)currentPassword callback:(CMUserOperationCallback)callback __attribute__((deprecated));
+
+/**
+ * Asynchronously change the Email for this user. For security purposes, you must have the user enter his or her
+ * current password in order to perform this operation. The user does not need to be logged in to change this property. If this method
+ * is successful then the user is automatically logged in again to get their new session token. If it is not successful, the user is not logged out.
+ * On completion, the <tt>callback</tt> block will be called with the result of the operation and any messages
+ * returned by the server contained in an array. See the CloudMine documentation online for the possible contents of this array.
+ *
+ * Possible result codes:
+ * - <tt>CMUserAccountEmailChangeSucceeded</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedInvalidCredentials</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateEmail</tt>
+ * - <tt>CMUserAccountOperationFailedUnknownAccount</tt>
+ * - <tt>CMUserAccountUnknownResult</tt>
+ *
+ * @param newEmail The new email for this user.
+ * @param currentPassword The current password for the user.
+ * @param callback The block that will be called on completion of the operation.
+ *
+ * @see CMUserAccountResult
+ */
+- (void)changeEmailTo:(NSString *)newEmail password:(NSString *)currentPassword callback:(CMUserOperationCallback)callback;
+
+/**
+ * Asynchronously change the Username for this user. For security purposes, you must have the user enter his or her
+ * current password in order to perform this operation. The user does not need to be logged in to change this property. If this method
+ * is successful then the user is automatically logged in again to get their new session token. If it is not successful, the user is not logged out.
+ * On completion, the <tt>callback</tt> block will be called with the result of the operation and any messages
+ * returned by the server contained in an array. See the CloudMine documentation online for the possible contents of this array.
+ *
+ * Possible result codes:
+ * - <tt>CMUserAccountUsernameChangeSucceeded</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedInvalidCredentials</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateUsername</tt>
+ * - <tt>CMUserAccountOperationFailedUnknownAccount</tt>
+ * - <tt>CMUserAccountUnknownResult</tt>
+ *
+ * @param newUsername The new Username for this user.
+ * @param currentPassword The current password for the user.
+ * @param callback The block that will be called on completion of the operation.
+ *
+ * @see CMUserAccountResult
+ */
+- (void)changeUsernameTo:(NSString *)newUsername password:(NSString *)currentPassword callback:(CMUserOperationCallback)callback;
+
+/**
+ * <strong>DEPRECATED:</strong> Use <tt>changeUserCredentialsWithPassword:newPassword:newUsername:newEmail:callback:</tt> instead.
+ *
+ * Asynchronously change the credentials for this user. This method can be called with any combination of new values for the user.
+ * It is useful when you want to change more than one value for the user, such as his username, userId, <em>and</em> password.
+ * For any operation, the current password must be provided. The user does not need to be logged in to use this method.
+ * If this method is successful then the user is automatically logged in again to get their new session token. If it is not successful, the user is not logged out.
+ * On completion, the <tt>callback</tt> block will be called with the result of the operation and any messages
+ * returned by the server contained in an array. See the CloudMine documentation online for the possible contents of this array.
+ *
+ * Possible result codes:
+ * - <tt>CMUserAccountPasswordChangeSucceeded</tt>
+ * - <tt>CMUserAccountUserIdChangeSucceeded</tt>
+ * - <tt>CMUserAccountUsernameChangeSucceeded</tt>
+ * - <tt>CMUserAccountCredentialsChangeSucceeded</tt> Used if more than one credential field was changed.
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateUserId</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateUsername</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateInfo</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedInvalidCredentials</tt>
+ * - <tt>CMUserAccountOperationFailedUnknownAccount</tt>
+ * - <tt>CMUserAccountUnknownResult</tt>
+ *
+ * @param currentPassword The new password for this user.
+ * @param newPassword Can be nil. The new password for the user.
+ * @param newUsername Can be nil. The new username for this user.
+ * @param newUserId Can be nil. The new userId for this user.
+ * @param callback The block that will be called on completion of the operation.
+ *
+ * @see CMUserAccountResult
+ */
+- (void)changeUserCredentialsWithPassword:(NSString *)currentPassword
+                              newPassword:(NSString *)newPassword
+                              newUsername:(NSString *)newUsername
+                                newUserId:(NSString *)newUserId
+                                 callback:(CMUserOperationCallback)callback __attribute__((deprecated));
+
+/**
+ * Asynchronously change the credentials for this user. This method can be called with any combination of new values for the user.
+ * It is useful when you want to change more than one value for the user, such as his username, email, <em>and</em> password.
+ * For any operation, the current password must be provided. The user does not need to be logged in to use this method.
+ * If this method is successful then the user is automatically logged in again to get their new session token. If it is not successful, the user is not logged out.
+ * On completion, the <tt>callback</tt> block will be called with the result of the operation and any messages
+ * returned by the server contained in an array. See the CloudMine documentation online for the possible contents of this array.
+ *
+ * Possible result codes:
+ * - <tt>CMUserAccountPasswordChangeSucceeded</tt>
+ * - <tt>CMUserAccountEmailChangeSucceeded</tt>
+ * - <tt>CMUserAccountUsernameChangeSucceeded</tt>
+ * - <tt>CMUserAccountCredentialsChangeSucceeded</tt> Used if more than one credential field was changed.
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateEmail</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateUsername</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateInfo</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedInvalidCredentials</tt>
+ * - <tt>CMUserAccountOperationFailedUnknownAccount</tt>
+ * - <tt>CMUserAccountUnknownResult</tt>
+ *
+ * @param currentPassword The new password for this user.
+ * @param newPassword Can be nil. The new password for the user.
+ * @param newUsername Can be nil. The new username for this user.
+ * @param newEmail Can be nil. The new email for this user.
+ * @param callback The block that will be called on completion of the operation.
+ *
+ * @see CMUserAccountResult
+ */
+- (void)changeUserCredentialsWithPassword:(NSString *)currentPassword
+                              newPassword:(NSString *)newPassword
+                              newUsername:(NSString *)newUsername
+                                 newEmail:(NSString *)newEmail
+                                 callback:(CMUserOperationCallback)callback;
 
 /**
  * Asynchronously reset the password for this user. This method is used to reset a user's password if
@@ -203,7 +465,7 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
  * @param callback The block that will be called on completion of the operation.
  *
  * @see CMUserAccountResult
- * @see https://cloudmine.me/developer_zone#ref/password_reset
+ * @see https://cloudmine.me/docs/ios/reference#users_pass_reset
  */
 - (void)resetForgottenPasswordWithCallback:(CMUserOperationCallback)callback;
 
@@ -221,6 +483,7 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
  */
 - (void)save:(CMUserOperationCallback)callback;
 
+
 /**
  * Asynchronously fetch all the users of this app. This will download the profiles of all the users of your app, and is useful for displaying
  * lists of people to share with or running analytics on your users yourself. On completion, the <tt>callback</tt> block will be called with an array
@@ -235,7 +498,7 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
  * and filtering lists of people to share with or running analytics on your users yourself. On completion, the <tt>callback</tt> block will be called with an array
  * of <tt>CMUser</tt> objects (or your custom subclass, if applicable) as well as a dictionary of errors.
  *
- * @param query The search query to run against all user profiles. This is the same syntax as defined at https://cloudmine.me/developer_zone#ref/query_syntax and used by <tt>CMStore</tt>'s search methods.
+ * @param query The search query to run against all user profiles. This is the same syntax as defined at https://cloudmine.me/docs/api#query_syntax and used by <tt>CMStore</tt>'s search methods.
  * @param callback The block that will be called on completion of the operation.
  */
 + (void)searchUsers:(NSString *)query callback:(CMUserFetchCallback)callback;
@@ -247,5 +510,37 @@ typedef void (^CMUserFetchCallback)(NSArray *users, NSDictionary *errors);
  * @param callback The block that will be called on completion of the operation.
  */
 + (void)userWithIdentifier:(NSString *)identifier callback:(CMUserFetchCallback)callback;
+
+/**
+ * Asynchronously adds a payment method (A credit card) to the user. The user should be logged in.
+ *
+ * @param paymentMethod The Credit Card you are adding.
+ * @param callback The block that will be called on completion of the operation.
+ */
+- (void)addPaymentMethod:(CMCardPayment *)paymentMethod callback:(CMPaymentServiceCallback)callback;
+
+/**
+ * Asynchronously adds payment methods (credit cards) to the user. The user should be logged in.
+ *
+ * @param paymentMethods The Credit Cards (CMPayment) you are adding.
+ * @param callback The block that will be called on completion of the operation.
+ */
+- (void)addPaymentMethods:(NSArray *)paymentMethods callback:(CMPaymentServiceCallback)callback;
+
+/**
+ * Asynchronously removes a payment (A credit card) from the user. The user should be logged in. The
+ * index is which credit card you want to remove.
+ *
+ * @param index The index for the Payment you are removing.
+ * @param callback The block that will be called on completion of the operation.
+ */
+- (void)removePaymentMethodAtIndex:(NSUInteger)index callback:(CMPaymentServiceCallback)callback;
+
+/**
+ * Asynchronously fetches the payment methods for the user. The user should be logged in.
+ *
+ * @param callback The block that will be called on completion of the operation.
+ */
+- (void)paymentMethods:(CMPaymentServiceCallback)callback;
 
 @end

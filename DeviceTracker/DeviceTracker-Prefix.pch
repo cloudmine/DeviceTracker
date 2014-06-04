@@ -13,4 +13,6 @@
     #import <Foundation/Foundation.h>
     #import <MapKit/MapKit.h>
     #import <CoreLocation/CoreLocation.h>
+    #import <SystemConfiguration/SystemConfiguration.h>
+    #import <MobileCoreServices/MobileCoreServices.h>
 #endif

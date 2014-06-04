@@ -11,21 +11,21 @@
 #import "AFHTTPClient.h"
 
 #import "CMFileUploadResult.h"
+#import "CMDeviceTokenResult.h"
 #import "CMUserAccountResult.h"
+#import "CMSocialLoginViewController.h"
+#import "CMChannelResponse.h"
+#import "CMViewChannelsResponse.h"
 
 @class CMUser;
 @class CMServerFunction;
 @class CMPagingDescriptor;
 @class CMSortDescriptor;
 
-/**
- * Base URL for the current version of the CloudMine API.
- */
-#ifdef DEBUG
-#define CM_BASE_URL @"http://localhost:3001/v1"
-#else
-#define CM_BASE_URL @"https://api.cloudmine.me/v1"
-#endif
+typedef void (^CMWebServiceGenericRequestCallback)(id parsedBody, NSUInteger httpCode, NSDictionary *headers);
+
+typedef void (^CMWebServiceErorCallack)(id responseBody, NSUInteger httpCode, NSDictionary *headers, NSError *error, NSDictionary *errorInfo );
+
 
 /**
  * Callback block signature for all operations on <tt>CMWebService</tt> that fetch objects
@@ -51,6 +51,15 @@ typedef void (^CMWebServiceFetchFailureCallback)(NSError *error);
 typedef void (^CMWebServiceFileUploadSuccessCallback)(CMFileUploadResult result, NSString *fileKey, id snippetResult, NSDictionary *headers);
 
 /**
+ * Callback block signature for operations on <tt>CMWebService</tt> that directly execute a server-side code snippet on the CloudMine servers.
+ * These blocks return <tt>void</tt> and take the snippet result (the type of which is determined by the type of data you use inside your exit() call 
+ * in your server-side JavaScript code or what you return from the main method in your server-side Java code) and all the headers of the response.
+ */
+typedef void (^CMWebServiceSnippetRunSuccessCallback)(id snippetResult, NSDictionary *headers);
+
+typedef CMWebServiceFetchFailureCallback CMWebServiceSnippetRunFailureCallback;
+
+/**
  * Callback block signature for all operations on <tt>CMWebService</tt> that download binary files from
  * the CloudMine servers. These blocks return <tt>void</tt> and take an <tt>NSData</tt> instance that contains
  * the raw data for the file as well as a string with the content type of the file returned from the server.
@@ -73,27 +82,59 @@ typedef void (^CMWebServiceUserAccountOperationCallback)(CMUserAccountResult res
  */
 typedef void (^CMWebServiceUserFetchSuccessCallback)(NSDictionary *results, NSDictionary *errors, NSNumber *count);
 
+typedef void (^CMWebServicesSocialQuerySuccessCallback)(NSString *results, NSDictionary *headers);
+
+typedef void (^CMWebServiceResultCallback)(id responseBody, NSError *errors, NSUInteger httpCode);
+
 /**
  * Base class for all classes concerned with the communication between the client device and the CloudMine
  * web services.
  */
-@interface CMWebService : AFHTTPClient {
+@interface CMWebService : AFHTTPClient <CMSocialLoginViewControllerDelegate> {
     NSString *_appSecret;
     NSString *_appIdentifier;
 }
 
++ (CMWebService *)sharedWebService;
+
+
 /**
  * Default initializer for the web service connector. You <strong>must</strong> have already configured the
  * <tt>CMUserCredentials</tt> singleton or an exception will be thrown.
+ * The baseURL will be to CloudMine, or whatever is last configured in CMAPICredentials.
  *
  * @throws NSInternalInconsistencyException <tt>CMUserCredentials</tt> has not been configured.
  */
 - (id)init;
 
 /**
- * Initializes an instance of a web service connector with the given API key and secret app key.
+ * Default initializer for the web service connector. You <strong>must</strong> have already configured the
+ * <tt>CMUserCredentials</tt> singleton or an exception will be thrown.
+ * The baseURL will be to CloudMine, or whatever is last configured in CMAPICredentials.
+ *
+ * @param url The base URL you want to point this web service to. Defaults to CloudMine.
+ * @throws NSInternalInconsistencyException <tt>CMUserCredentials</tt> has not been configured.
+ */
+- (id)initWithBaseURL:(NSURL *)url;
+
+/**
+ * Initializes an instance of a web service connector with the given API key and secret app key. The baseURL for
+ * this WebService will be to CloudMine, or whatever is last configured in CMAPICredentials.
+ * 
+ * @param appSecret The App Secret for your application
+ * @param appIdentifier The App ID for your application
  */
 - (id)initWithAppSecret:(NSString *)appSecret appIdentifier:(NSString *)appIdentifier;
+
+/**
+ * Initializes an instance of the Web Service with the App ID, and secret key, and base URL This can be useful
+ * if you are pointing your CloudMine SDK to a different place than the default. All parameters are required.
+ *
+ * @param appSecret The App Secret for your application
+ * @param appIdentifier The App ID for your application
+ * @param url The Base URL you want this Web Service to point to.
+ */
+- (id)initWithAppSecret:(NSString *)appSecret appIdentifier:(NSString *)appIdentifier baseURL:(NSURL *)url;
 
 /**
  * Asynchronously retrieve all ACLs associated with the named user. On completion, the <tt>successHandler</tt> block
@@ -139,7 +180,7 @@ typedef void (^CMWebServiceUserFetchSuccessCallback)(NSDictionary *results, NSDi
  * Asynchronously search all ACLs associated with the user, using the specified query. On completion, the <tt>successHandler</tt> block
  * will be called with a dictionary of the ACLs retrieved.
  *
- * @param query This is the same syntax as defined at https://cloudmine.me/developer_zone#ref/query_syntax and used by <tt>CMStore</tt>'s search methods.
+ * @param query This is the same syntax as defined at https://cloudmine.me/docs/api#query_syntax and used by <tt>CMStore</tt>'s search methods.
  * @param user The user whose ACLs to query.
  * @param successHandler The block to be called when the objects have been populated.
  * @param errorHandler The block to be called if the entire request failed (i.e. if there is no network connectivity).
@@ -312,7 +353,7 @@ typedef void (^CMWebServiceUserFetchSuccessCallback)(NSDictionary *results, NSDi
  * @param callback The block that will be called on completion of the operation.
  *
  * @see CMUserAccountResult
- * @see https://cloudmine.me/developer_zone#ref/account_login
+ * @see https://cloudmine.me/docs/ios/reference#users_login
  */
 - (void)loginUser:(CMUser *)user callback:(CMWebServiceUserAccountOperationCallback)callback;
 
@@ -329,7 +370,7 @@ typedef void (^CMWebServiceUserFetchSuccessCallback)(NSDictionary *results, NSDi
  * @param callback The block that will be called on completion of the operation.
  *
  * @see CMUserAccountResult
- * @see https://cloudmine.me/developer_zone#ref/account_logout
+ * @see https://cloudmine.me/docs/ios/reference#users_logout
  */
 - (void)logoutUser:(CMUser *)user callback:(CMWebServiceUserAccountOperationCallback)callback;
 
@@ -348,9 +389,25 @@ typedef void (^CMWebServiceUserFetchSuccessCallback)(NSDictionary *results, NSDi
  * @param callback The block that will be called on completion of the operation.
  *
  * @see CMUserAccountResult
- * @see https://cloudmine.me/developer_zone#ref/account_create
+ * @see https://cloudmine.me/docs/ios/reference#users_create
  */
 - (void)createAccountWithUser:(CMUser *)user callback:(CMWebServiceUserAccountOperationCallback)callback;
+
+/**
+ * Initialize the social login service by calling the SocialLoginViewController (which contains only a webview)
+ * 
+ * @param user The user object that is attempting the login
+ * @param service The social service to be logged into, @see CMSocialNetwork codes
+ * @param viewController the current viewController in use when this method is called
+ * @param params Any extra parameters you want passed in to the authentication request. This dictionary is parsed where each key value pair becomes "&key=value". We do not encode the URL after this, so any encoding will need to be done by the creator. This is a good place to put scope, for example: @{@"scope" : @"gist,repo"}
+ * @param callback The block that will be called on completion of the operation
+ * @see https://cloudmine.me/docs/api#users_social
+ */
+- (CMSocialLoginViewController *)loginWithSocial:(CMUser *)user
+                                     withService:(NSString *)service
+                                  viewController:(UIViewController *)viewController
+                                          params:(NSDictionary *)params
+                                        callback:(CMWebServiceUserAccountOperationCallback)callback;
 
 /**
  * Asynchronously change the password for the given user. For security purposes, you must have the user enter his or her
@@ -372,9 +429,85 @@ typedef void (^CMWebServiceUserFetchSuccessCallback)(NSDictionary *results, NSDi
  * @param callback The block that will be called on completion of the operation.
  *
  * @see CMUserAccountResult
- * @see https://cloudmine.me/developer_zone#ref/password_change
+ * @see https://cloudmine.me/docs/ios/reference#users_pass_change
  */
 - (void)changePasswordForUser:(CMUser *)user oldPassword:(NSString *)oldPassword newPassword:(NSString *)newPassword callback:(CMWebServiceUserAccountOperationCallback)callback;
+
+
+
+/**
+ * <strong>DEPRECATED: </strong> This method is now deprecated. Use <tt>changeCredentialsForUser:password:newPassword:newUsername:newEmail:callback:</tt> instead.
+ *
+ * Asynchronously change the credentials for the given user. For security purposes, you must have the user enter his or her password
+ * in order to perform this operation. This operation will succeed regardless of whether the user's <tt>CMUser</tt> instance
+ * is logged in or not.
+ * This method is useful when changing multiple fields for the user, and is the only method to change their username/userId. This
+ * method is generally called from the <tt>CMUser</tt>.
+ * On completion, the <tt>callback</tt> block will be called with the result  of the operation and the body of the
+ * response represented by an <tt>NSDictonary</tt>. See the CloudMine documentation online for the possible contents of this dictionary.
+ *
+ * Possible result codes:
+ * - <tt>CMUserAccountPasswordChangeSucceeded</tt>
+ * - <tt>CMUserAccountUserIdChangeSucceeded</tt>
+ * - <tt>CMUserAccountUsernameChangeSucceeded</tt>
+ * - <tt>CMUserAccountCredentialsChangeSucceeded</tt> Used if more than one credential field was changed.
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateUserId</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateUsername</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateInfo</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedInvalidCredentials</tt>
+ * - <tt>CMUserAccountOperationFailedUnknownAccount</tt>
+ * - <tt>CMUserAccountUnknownResult</tt>
+ *
+ * @param user The user who is having their credentials changed.
+ * @param password The current password for the user.
+ * @param newPassword Can be nil. The new password for the user.
+ * @param newUsername Can be nil. The new username for the user.
+ * @param newUserId Can be nil. THe new userId for the user. Must be in the form of an email.
+ *
+ * @see CMUserAccountResult
+ */
+- (void)changeCredentialsForUser:(CMUser *)user
+                        password:(NSString *)password
+                     newPassword:(NSString *)newPassword
+                     newUsername:(NSString *)newUsername
+                       newUserId:(NSString *)newUserId
+                        callback:(CMWebServiceUserAccountOperationCallback)callback __attribute__((deprecated));
+
+/**
+ * Asynchronously change the credentials for the given user. For security purposes, you must have the user enter his or her password
+ * in order to perform this operation. This operation will succeed regardless of whether the user's <tt>CMUser</tt> instance
+ * is logged in or not.
+ * This method is useful when changing multiple fields for the user, and is the only method to change their username/email. This
+ * method is generally called from the <tt>CMUser</tt>.
+ * On completion, the <tt>callback</tt> block will be called with the result  of the operation and the body of the
+ * response represented by an <tt>NSDictonary</tt>. See the CloudMine documentation online for the possible contents of this dictionary.
+ *
+ * Possible result codes:
+ * - <tt>CMUserAccountPasswordChangeSucceeded</tt>
+ * - <tt>CMUserAccountEmailChangeSucceeded</tt>
+ * - <tt>CMUserAccountUsernameChangeSucceeded</tt>
+ * - <tt>CMUserAccountCredentialsChangeSucceeded</tt> Used if more than one credential field was changed.
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateEmail</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateUsername</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedDuplicateInfo</tt>
+ * - <tt>CMUserAccountCredentialChangeFailedInvalidCredentials</tt>
+ * - <tt>CMUserAccountOperationFailedUnknownAccount</tt>
+ * - <tt>CMUserAccountUnknownResult</tt>
+ *
+ * @param user The user who is having their credentials changed.
+ * @param password The current password for the user.
+ * @param newPassword Can be nil. The new password for the user.
+ * @param newUsername Can be nil. The new username for the user.
+ * @param newUserId Can be nil. THe new userId for the user. Must be in the form of an email.
+ *
+ * @see CMUserAccountResult
+ */
+- (void)changeCredentialsForUser:(CMUser *)user
+                        password:(NSString *)password
+                     newPassword:(NSString *)newPassword
+                     newUsername:(NSString *)newUsername
+                        newEmail:(NSString *)newEmail
+                        callback:(CMWebServiceUserAccountOperationCallback)callback;
 
 /**
  * Asynchronously reset the password for the given user. This method is used to reset a user's password if
@@ -393,7 +526,7 @@ typedef void (^CMWebServiceUserFetchSuccessCallback)(NSDictionary *results, NSDi
  * @param callback The block that will be called on completion of the operation.
  *
  * @see CMUserAccountResult
- * @see https://cloudmine.me/developer_zone#ref/password_reset
+ * @see https://cloudmine.me/docs/ios/reference#users_pass_reset
  */
 - (void)resetForgottenPasswordForUser:(CMUser *)user callback:(CMWebServiceUserAccountOperationCallback)callback;
 
@@ -420,11 +553,156 @@ typedef void (^CMWebServiceUserFetchSuccessCallback)(NSDictionary *results, NSDi
  * and is useful for displaying and filtering lists of people to share with or running analytics on your users yourself. On completion, the <tt>callback</tt> block
  * will be called with a dictionary of the objects retrieved as well as a dictionary of the key-related errors returned from the server.
  *
- * @param query The search query to run against all user profiles. This is the same syntax as defined at https://cloudmine.me/developer_zone#ref/query_syntax and used by <tt>CMStore</tt>'s search methods.
+ * @param query The search query to run against all user profiles. This is the same syntax as defined at https://cloudmine.me/docs/api#query_syntax and used by <tt>CMStore</tt>'s search methods.
  * @param callback The block that will be called on completion of the operation.
  */
 - (void)searchUsers:(NSString *)query callback:(CMWebServiceUserFetchSuccessCallback)callback;
 
 - (void)saveUser:(CMUser *)user callback:(CMWebServiceUserAccountOperationCallback)callback;
+
+/**
+ * Asynchronously execute a snippet. On completion, the <tt>successHandler</tt> block will be called with the result of the snippet.
+ *
+ * @param snippetName The name of the server-side snippet to run.
+ * @param params Any parameters that need to be passed to the snippet. Can be nil.
+ * @param user Passed to the snippet if it operates on user-level objects. If nil, then the snippet will operate on app-level objects.
+ * @param successHandler The block to be called when the snippet successfully executes.
+ * @param errorHandler The block to be called if the request failed.
+ */
+- (void)runSnippet:(NSString *)snippetName withParams:(NSDictionary *)params user:(CMUser *)user successHandler:(CMWebServiceSnippetRunSuccessCallback)successHandler errorHandler:(CMWebServiceFetchFailureCallback)errorHandler;
+
+- (void)runPOSTSnippet:(NSString *)snippetName withBody:(NSData *)body user:(CMUser *)user successHandler:(CMWebServiceSnippetRunSuccessCallback)successHandler errorHandler:(CMWebServiceSnippetRunFailureCallback)errorHandler;
+
+/**
+ * Asynchronously register the device token with CloudMine. On completion, the <tt>callback</tt> will be called with the result of the registration.
+ *
+ * @param user The user to which you want the token registered.
+ * @param devToken Required, the token Apple has supplied for getting push notifications, this should be unaltered.
+ * @param callback The callback called when the result is done.
+ */
+- (void)registerForPushNotificationsWithUser:(CMUser *)user token:(NSData *)devToken callback:(CMWebServiceDeviceTokenCallback)callback;
+
+/**
+ * Asynchronously unregister the device with CloudMine. The device should be registered already before calling this.
+ *
+ * @param user The user who has the token registered to it
+ * @param callback The callback called when the request has finished.
+ */
+- (void)unRegisterForPushNotificationsWithUser:(CMUser *)user callback:(CMWebServiceDeviceTokenCallback)callback;
+
+/**
+ * Asynchronously subscribes this device to a named Channel. The device should be registered to receive push notificiations.
+ *
+ * @param channel The Push Channel to register this device too.
+ * @param callback The CMWebServiceDeviceChannelCallback that will be called when the call is finished.
+ */
+- (void)subscribeThisDeviceToPushChannel:(NSString *)channel callback:(CMWebServiceDeviceChannelCallback)callback;
+
+/**
+ * Asynchronously subscribes a device to a named Channel. The device should be registered to receive push notificiations.
+ *
+ * @param deviceID The deviceID that should be registered to the channel.
+ * @param channel The Push Channel to register this device too.
+ * @param callback The CMWebServiceDeviceChannelCallback that will be called when the call is finished.
+ */
+- (void)subscribeDevice:(NSString *)deviceID toPushChannel:(NSString *)channel callback:(CMWebServiceDeviceChannelCallback)callback;
+
+/**
+ * Asynchronously subscribes the user to a named Channel. The user needs to be logged in.
+ *
+ * @param user The user who should be subscribed to the channel.
+ * @param channel The Push Channel to register this device too.
+ * @param callback The CMWebServiceDeviceChannelCallback that will be called when the call is finished.
+ */
+- (void)subscribeUser:(CMUser *)user toPushChannel:(NSString *)channel callback:(CMWebServiceDeviceChannelCallback)callback;
+
+/**
+ * Asynchronously unsubscribes this device from a named Channel.
+ *
+ * @param channel The Push Channel to register this device too.
+ * @param callback The CMWebServiceDeviceChannelCallback that will be called when the call is finished.
+ */
+- (void)unSubscribeThisDeviceFromPushChannel:(NSString *)channel callback:(CMWebServiceDeviceChannelCallback)callback;
+
+/**
+ * Asynchronously unsubscribes a device from a named Channel. The device should be registered to receive push notificiations.
+ *
+ * @param deviceID The deviceID that should be registered to the channel.
+ * @param channel The Push Channel to register this device too.
+ * @param callback The CMWebServiceDeviceChannelCallback that will be called when the call is finished.
+ */
+- (void)unSubscribeDevice:(NSString *)deviceID fromPushChannel:(NSString *)channel callback:(CMWebServiceDeviceChannelCallback)callback;
+
+/**
+ * Asynchronously unsubscribes the user from a named Channel. The user needs to be logged in.
+ *
+ * @param user The user who should be subscribed to the channel.
+ * @param channel The Push Channel to register this device too.
+ * @param callback The CMWebServiceDeviceChannelCallback that will be called when the call is finished.
+ */
+- (void)unSubscribeUser:(CMUser *)user fromPushChannel:(NSString *)channel callback:(CMWebServiceDeviceChannelCallback)callback;
+
+/**
+ * Asynchronously gets the channels this device is registered too.
+ *
+ * @param callback The CMViewChannelsRequestCallback that will be called when the call is finished.
+ */
+- (void)getChannelsForThisDeviceWithCallback:(CMViewChannelsRequestCallback)callback;
+
+/**
+ * Asynchronously gets the channels a device is registered too.
+ *
+ * @param deviceID The deviceID to query.
+ * @param callback The CMViewChannelsRequestCallback that will be called when the call is finished.
+ */
+- (void)getChannelsForDevice:(NSString *)deviceID callback:(CMViewChannelsRequestCallback)callback;
+
+/**
+ * Asynchronously execute a request on the social network through the singly proxy.
+ *
+ * @param network The Network this request is targeting. @see CMSocialNetwork
+ * @param verb the HTTP verb this request is calling.
+ * @param base Can be nil, but probably shouldn't be most of the time. The base query for the request, before any "query" parameters. This does NOT include the hostname, or the version of the API. For example, "https://api.twitter.com/1.1/statuses/home_timeline.json", would just be "statuses/home_timeline.json".
+ * @param params Can be nil. The Parameters that would go into the query. These typically are typed out like "some_page.json?query1=testing&querynumber2=test". We take care of formatting that for you, and encoding it in json. The Dictionary keys are used as the first part of the query, and the value is used after the "=". Formatted into a json encoded URL.
+ * @param data Can be nil. The data encoded in the request body. We do no encoding, we simply put it as the request body.
+ * @param user The user who is making the request to the network he is logged in to.
+ * @param successHandler The callback for a successful query
+ * @param errorHandler The callback for dealing with errors
+ */
+- (void)runSocialGraphQueryOnNetwork:(NSString *)network
+                            withVerb:(NSString *)verb
+                           baseQuery:(NSString *)base
+                          parameters:(NSDictionary *)params
+                             headers:(NSDictionary *)headers
+                         messageData:(NSData *)data
+                            withUser:(CMUser *)user
+                       successHandler:(CMWebServicesSocialQuerySuccessCallback)successHandler
+                        errorHandler:(CMWebServiceFetchFailureCallback)errorHandler;
+
+/**
+ * Asynchronously execute a GET request with no Data. Convenience method.
+ *
+ * @param network The Network this request is targeting. @see CMSocialNetwork
+ * @param base Can be nil, but probably shoudln't be most of the time. The base query for the request, before any "query" parameters. This does NOT include the hostname, or the version of the API. For example, "https://api.twitter.com/1.1/statuses/home_timeline.json", would just be "statuses/home_timeline.json".
+ * @param params Can be nil. The Parameters that would go into the query. These typically are typed out like "some_page.json?query1=testing&querynumber2=test". We take care of formatting that for you, and encoding it in json. The Dictionary keys are used as the first part of the query, and the value is used after the "=". Formatted into a json encoded URL.
+ * @param user The user who is making the request to the network he is logged in to.
+ * @param successHandler The callback for a successful query
+ * @param errorHandler The callback for dealing with errors
+ */
+- (void)runSocialGraphGETQueryOnNetwork:(NSString *)network
+                           baseQuery:(NSString *)base
+                          parameters:(NSDictionary *)params
+                                headers:(NSDictionary *)headers
+                            withUser:(CMUser *)user
+                       successHandler:(CMWebServicesSocialQuerySuccessCallback)successHandler
+                        errorHandler:(CMWebServiceFetchFailureCallback)errorHandler;
+
+
+- (void)executeGenericRequest:(NSURLRequest *)request successHandler:(CMWebServiceGenericRequestCallback)successHandler errorHandler:(CMWebServiceErorCallack)errorHandler;
+
+- (NSMutableURLRequest *)constructHTTPRequestWithVerb:(NSString *)verb URL:(NSURL *)url binaryData:(BOOL)isForBinaryData user:(CMUser *)user;
+
+- (NSURL *)constructAppURLWithString:(NSString *)url andDescriptors:(NSArray *)descriptors;
+
 
 @end

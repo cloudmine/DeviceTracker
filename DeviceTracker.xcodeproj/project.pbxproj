@@ -23,6 +23,7 @@
 		7A74C27A14F443CC002F6BE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C27914F443CC002F6BE0 /* MapKit.framework */; };
 		7A74C27F14F492F9002F6BE0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A74C27E14F492F9002F6BE0 /* CoreLocation.framework */; };
 		7A74C28214F580B6002F6BE0 /* DTDeviceToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A74C28114F580B6002F6BE0 /* DTDeviceToken.m */; };
+		AAF9B5C5193FBD1D008C5367 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAF9B5C4193FBD1D008C5367 /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		7A74C27E14F492F9002F6BE0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7A74C28014F580B5002F6BE0 /* DTDeviceToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTDeviceToken.h; sourceTree = "<group>"; };
 		7A74C28114F580B6002F6BE0 /* DTDeviceToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTDeviceToken.m; sourceTree = "<group>"; };
+		AAF9B5C4193FBD1D008C5367 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAF9B5C5193FBD1D008C5367 /* Security.framework in Frameworks */,
 				7A74C27F14F492F9002F6BE0 /* CoreLocation.framework in Frameworks */,
 				7A74C27A14F443CC002F6BE0 /* MapKit.framework in Frameworks */,
 				7A74C27614F44067002F6BE0 /* MobileCoreServices.framework in Frameworks */,
@@ -91,6 +94,7 @@
 		7A74C25114F44029002F6BE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AAF9B5C4193FBD1D008C5367 /* Security.framework */,
 				7A54E4A314FC7C40000A041E /* CloudMine.framework */,
 				7A74C27E14F492F9002F6BE0 /* CoreLocation.framework */,
 				7A74C27914F443CC002F6BE0 /* MapKit.framework */,
@@ -291,7 +295,7 @@
 				GCC_PREFIX_HEADER = "DeviceTracker/DeviceTracker-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../cloudmine-ios/ios/build/Release-iphoneuniversal/CloudMine.framework/Headers\"/**";
 				INFOPLIST_FILE = "DeviceTracker/DeviceTracker-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = KidTracker;
 				WRAPPER_EXTENSION = app;
 			};
@@ -309,7 +313,7 @@
 				GCC_PREFIX_HEADER = "DeviceTracker/DeviceTracker-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../cloudmine-ios/ios/build/Release-iphoneuniversal/CloudMine.framework/Headers\"/**";
 				INFOPLIST_FILE = "DeviceTracker/DeviceTracker-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = KidTracker;
 				WRAPPER_EXTENSION = app;
 			};

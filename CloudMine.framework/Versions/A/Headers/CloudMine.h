@@ -35,7 +35,7 @@
  * - UIKit
  * - libz
  *
- * The <a href="https://cloudmine.me/developer_zone#ios/tutorials" target="_blank">video walkthrough</a> below shows you how to do this.
+ * The <a href="https://cloudmine.me/docs/ios/tutorial" target="_blank">video walkthrough</a> below shows you how to do this.
  */
 
 #import "CMAPICredentials.h"
@@ -54,6 +54,7 @@
 #import "CMObjectSerialization.h"
 #import "CMPagingDescriptor.h"
 #import "CMSerializable.h"
+#import "CMCoding.h"
 #import "CMServerFunction.h"
 #import "CMSortDescriptor.h"
 #import "CMStore.h"
@@ -63,6 +64,9 @@
 #import "CMUser.h"
 #import "CMUserAccountResult.h"
 #import "CMWebService.h"
+#import "CMAppDelegateBase.h"
+
+#import "CMSocialLoginViewController.h"
 
 #import "CMACLFetchResponse.h"
 #import "CMObjectFetchResponse.h"
@@ -70,3 +74,6 @@
 #import "CMFileFetchResponse.h"
 #import "CMFileUploadResult.h"
 #import "CMDeleteResponse.h"
+#import "CMChannelResponse.h"
+
+#import "UIImageView+CloudMine.h"
